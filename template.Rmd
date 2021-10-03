@@ -79,3 +79,24 @@ pulse_df
 ```
 
 
+## comparision with Base R
+
+what about `read.csv` ...?
+`read.csv` is based in the R, and did not to load any package.
+but NEVER use this!!!
+
+```{r}
+litter_base = read.csv("./data/FAS_litters.csv")
+```
+
+the output print is really hard to read!
+
+## exporting data
+
+export the mlb sub_table
+
+```{r}
+mlb_df
+write_csv(mlb_df, "./data/mlb_subtable.csv")
+```
+
