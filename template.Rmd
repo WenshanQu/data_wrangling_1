@@ -40,6 +40,42 @@ skimr::skim(litters_df)
 view(litters_df)
 ```
 
+## options to read_csv
 
+check out `?read_csv()` for more information
+
+1) skip first 10 rows
+2) clear the null data in various formats
+```{r}
+litters_df = read_csv("./data/FAS_litters.csv", skip = 10, col_names = FALSE)
+litters_df = read_csv("./data/FAS_litters.csv", na = c("", "NA", ".", 999))
+```
+
+## other file formats
+
+read in excel file.
+
+note: in terms of loading difference packages, you can do it here, or at the begining with `tidyverse`
+note: names already clean, so we do not need to clean names!
+
+check `?read_excel`
+
+special options for excel data: choose **sheet** and choose **range** you want to read.
+
+```{r}
+library(readxl)
+mlb_df = read_excel("./data/mlb11.xlsx")
+mlb_df
+view(mlb_df)
+```
+
+read in SAS file.
+
+need to cleann names.
+```{r}
+library(haven)
+pulse_df = read_sas("./data/public_pulse_data.sas7bdat")
+pulse_df
+```
 
 
