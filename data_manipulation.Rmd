@@ -1,102 +1,109 @@
 ---
-title: "data import"
+title: "data manipulation"
 output: github_document
 ---
 
 ```{r}
 library(tidyverse)
 ```
-
-## read in some data: using relative path (will still work on other people's computer)
-
-read in the litters dataset.
-
-`read_csv` is a function in readr
-
-`clean_names` function did not contains in R or tidyverse, it's in `janitor` package, and we use `janitor::` to realize this without loading all the janitor package.
-
+ ## load in the FAS litter data
+ 
 ```{r}
 litters_df = read_csv("./data/FAS_litters.csv")
 litters_df = janitor::clean_names(litters_df)
 ```
+ 
 
-## take a look at the data
+## `select`
 
-printing in the console
+choose some columns but not others.
+
 ```{r}
-litters_df
+select(litters_df, group, litter_number)
 ```
 
 ```{r}
-head(litters_df)
-tail(litters_df)
-```
-# we only use one function `skim` in `skimr` package, so we do not load `library(skimr)`. we use `skimr::skim`
-```{r}
-skimr::skim(litters_df)
-```
-`view()` function is a useful function, but not usually put it in a code chunk!
-```{r}
-view(litters_df)
+select(litters_df, group, gd0_weight:gd_of_birth)
 ```
 
-## options to read_csv
-
-check out `?read_csv()` for more information
-
-1) skip first 10 rows
-2) clear the null data in various formats
 ```{r}
-litters_df = read_csv("./data/FAS_litters.csv", skip = 10, col_names = FALSE)
-litters_df = read_csv("./data/FAS_litters.csv", na = c("", "NA", ".", 999))
+select(litters_df, -litter_number)
 ```
 
-## other file formats
-
-read in excel file.
-
-note: in terms of loading difference packages, you can do it here, or at the begining with `tidyverse`
-note: names already clean, so we do not need to clean names!
-
-check `?read_excel`
-
-special options for excel data: choose **sheet** and choose **range** you want to read.
+renaming columns 
 
 ```{r}
-library(readxl)
-mlb_df = read_excel("./data/mlb11.xlsx")
-mlb_df
-view(mlb_df)
+select(litters_df, GROUP = group, LITTer_NuMBEr = litter_number)
 ```
 
-read in SAS file.
+also you could use `renmae` to rename without selecting columns!
 
-need to cleann names.
 ```{r}
-library(haven)
-pulse_df = read_sas("./data/public_pulse_data.sas7bdat")
-pulse_df
+rename(litters_df, GROUP = group, LITTer_NuMBEr = litter_number)
 ```
 
+Select helpers
 
-## comparision with Base R
-
-what about `read.csv` ...?
-`read.csv` is based in the R, and did not to load any package.
-but NEVER use this!!!
-
+choose variables with same begining
 ```{r}
-litter_base = read.csv("./data/FAS_litters.csv")
+select(litters_df, starts_with("gd"))
 ```
 
-the output print is really hard to read!
+!!! if you want to keep litter_number at first column, and keep everything else the same, you can use `everything()` like this!
+```{r}
+select(litters_df, litter_number, everything())
+```
 
-## exporting data
-
-export the mlb sub_table
+also, the `relocate()` function could also relocate a column to the beginning!
 
 ```{r}
-mlb_df
-write_csv(mlb_df, "./data/mlb_subtable.csv")
+relocate(litters_df, litter_number)
+```
+
+## `filter`
+
+```{r}
+filter(litters_df, gd0_weight < 22)
+
+filter(litters_df, gd0_weight >= 22)
+```
+
+note: use **==**
+note: the `!()` means **not equal to**
+```{r}
+filter(litters_df, gd_of_birth == 20)
+
+filter(litters_df, !(gd_of_birth == 20))
+```
+
+```{r}
+filter(litters_df, gd_of_birth == 20, gd0_weight >= 22)
+```
+
+note: use **==**
+```{r}
+filter(litters_df, group == "Mod8")
+```
+
+note: `%in%`
+```{r}
+filter(litters_df, group %in% c("Con7", "Mod8"))
+```
+
+## `mutate`
+
+note: `str_to_lower()` can change the character into lower cases.
+```{r}
+mutate(
+  litters_df, 
+  wt_gain = gd18_weight - gd0_weight,
+  group = str_to_lower(group)
+  )
+```
+
+## `arrange`
+
+```{r}
+arrange(litters_df, pups_born_alive)
 ```
 
