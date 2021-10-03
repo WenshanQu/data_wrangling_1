@@ -1,21 +1,45 @@
 ---
-title: "Simple document"
-output: html_document
+title: "data import"
+output: github_document
 ---
 
-I'm an R Markdown document! 
-
-# Section 1
-
-Here's a **code chunk** that samples from 
-a _normal distribution_:
-
 ```{r}
-samp = rnorm(100)
-length(samp)
+library(tidyverse)
 ```
 
-# Section 2
+## read in some data: using relative path (will still work on other people's computer)
 
-I can take the mean of the sample, too!
-The mean is `r mean(samp)`.
+read in the litters dataset.
+
+`read_csv` is a function in readr
+
+`clean_names` function did not contains in R or tidyverse, it's in `janitor` package, and we use `janitor::` to realize this without loading all the janitor package.
+
+```{r}
+litters_df = read_csv("./data/FAS_litters.csv")
+litters_df = janitor::clean_names(litters_df)
+```
+
+## take a look at the data
+
+printing in the console
+```{r}
+litters_df
+```
+
+```{r}
+head(litters_df)
+tail(litters_df)
+```
+# we only use one function `skim` in `skimr` package, so we do not load `library(skimr)`. we use `skimr::skim`
+```{r}
+skimr::skim(litters_df)
+```
+`view()` function is a useful function, but not usually put it in a code chunk!
+```{r}
+view(litters_df)
+```
+
+
+
+
