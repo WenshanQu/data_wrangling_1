@@ -6,3 +6,59 @@ output: github_document
 ```{r}
 library(tidyverse)
 ```
+ ## load in the FAS litter data
+ 
+```{r}
+litters_df = read_csv("./data/FAS_litters.csv")
+litters_df = janitor::clean_names(litters_df)
+```
+ 
+
+## `select`
+
+choose some columns but not others.
+
+```{r}
+select(litters_df, group, litter_number)
+```
+
+```{r}
+select(litters_df, group, gd0_weight:gd_of_birth)
+```
+
+```{r}
+select(litters_df, -litter_number)
+```
+
+renaming columns 
+
+```{r}
+select(litters_df, GROUP = group, LITTer_NuMBEr = litter_number)
+```
+
+also you could use `renmae` to rename without selecting columns!
+
+```{r}
+rename(litters_df, GROUP = group, LITTer_NuMBEr = litter_number)
+```
+
+Select helpers
+
+choose variables with same begining
+```{r}
+select(litters_df, starts_with("gd"))
+```
+
+!!! if you want to keep litter_number at first column, and keep everything else the same, you can use `everything()` like this!
+```{r}
+select(litters_df, litter_number, everything())
+```
+
+also, the `relocate()` function could also relocate a column to the beginning!
+
+```{r}
+relocate(litters_df, litter_number)
+```
+
+
+
