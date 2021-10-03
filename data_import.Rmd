@@ -90,4 +90,14 @@ note: `%in%`
 filter(litters_df, group %in% c("Con7", "Mod8"))
 ```
 
+## `mutate`
+
+note: `str_to_lower()` can change the character into lower cases.
+```{r}
+mutate(
+  litters_df, 
+  wt_gain = gd18_weight - gd0_weight,
+  group = str_to_lower(group)
+  )
+```
 
